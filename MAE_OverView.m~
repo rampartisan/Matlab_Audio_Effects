@@ -1,7 +1,14 @@
 %% Matlab Audio Effects
+
 [x,Fs] = audioread('acousticGtr.wav');
 
-%% Downsampler (Takes too long!)
+
+%% Sample and Hold
+% y = (input,sampleRate,meanLen,holdDivs,holdOccur,mode)
+y = MAE_SampHold(x,Fs,0.2,[2 8],0.2,0);
+soundsc(y,Fs);
+
+%% Downsampler
 % y = (input,division of original sample rate)
 y = MAE_Downsamp(x,4);
 soundsc(y,Fs);
@@ -9,6 +16,11 @@ soundsc(y,Fs);
 %% Tremolo
 % y = (input,sampleRate,modFreq,depth)
 y = MAE_Tremolo(x,Fs,2,0.5);
+soundsc(y,Fs);
+
+%% Simple Delay
+% y = (input,sampleRate,delay time)
+y = MAE_Del(x,Fs,0.3);
 soundsc(y,Fs);
 
 %% Flanger
@@ -23,7 +35,7 @@ soundsc(y,Fs);
 
 %% Wah-Wah
 %(input,SampleRate,speed,cFreq,width,damp)
-y = MAE_WahWah(x,Fs,1000,500,400,0.05);
+y = MAE_WahWah(x,Fs,4000,1750,875,0.05);
 soundsc(y,Fs);
 
 %% Simple Delay
@@ -33,14 +45,8 @@ soundsc(y,Fs);
 
 %% PingPong Delay
 %(input,SampleRate,DelTime,FeedBackAmount)
-y = MAE_PPDel(x,Fs,0.2,0.6);
+y = MAE_PPDel(x,Fs,0.5,0.5);
 soundsc(y,Fs);
-
-%% Sample and Hold
-% y = (input,sampleRate,meanLen,holdDivs,holdOccur,mode)
-y = MAE_SampHold(x,Fs,0.2,[2 8],0.2,0);
-soundsc(y,Fs);
-
 
 
 
