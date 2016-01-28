@@ -1,11 +1,11 @@
-function outPut = downsamp(input,Ds)
+function y = MAE_Downsamp(x,Ds)
 
-l = length(input);
+l = length(x);
 
 for i = 1:l
     if ~mod(i,Ds)
         for j = 1:Ds
-    outPut(i - (j-1),:) = input(i,:);
+    y(i - (j-1),:) = x(i,:);
         end
     end
 end
