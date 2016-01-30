@@ -31,9 +31,9 @@ soundsc(y,Fs);
 y = MAE_SimpleDel(x,Fs,0.05);
 soundsc(y,Fs);
 
-%% PingPong Delay
+%% Feedback Delay
 %(input,SampleRate,DelTime,FeedBackAmount)
-y = MAE_PPDel(x,Fs,0.2,0.6);
+y = MAE_FBDel(x,Fs,0.2,0.6);
 soundsc(y,Fs);
 
 %% Sample and Hold
