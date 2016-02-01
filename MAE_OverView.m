@@ -3,7 +3,7 @@
 
 %% Downsampler (Takes too long!)
 % y = (input,division of original sample rate)
-y = MAE_Downsamp(x,4);
+y = MAE_Downsamp(x,20);
 soundsc(y,Fs);
 
 %% Tremolo
@@ -33,7 +33,7 @@ soundsc(y,Fs);
 
 %% Feedback Delay
 %(input,SampleRate,DelTime,FeedBackAmount)
-y = MAE_FBDel(x,Fs,0.2,0.6);
+y = MAE_FBDel(x,Fs,1,0.4);
 soundsc(y,Fs);
 
 %% Sample and Hold
@@ -41,7 +41,5 @@ soundsc(y,Fs);
 y = MAE_SampHold(x,Fs,0.2,[2 8],0.2,0);
 soundsc(y,Fs);
 
-
-
-
-
+%% SNAC Pitch Detection
+y = MAE_SNAC
