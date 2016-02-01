@@ -1,8 +1,8 @@
-%%function z = MAE_SNAC(x,Fs,Ws)
-
+function z = MAE_SNAC(x,Fs,Ws)
 [x,Fs] = audioread('gtr.wav');
-Ws = 4096;
-thresh = 0.5;
+
+% Specially Normalised Autocorrelation in the time domain. Its very slow!
+
 % out vector of pitches
 z = zeros(length(x),1);
 % number of windows
@@ -31,16 +31,3 @@ for i = 1:numWin
     [pks,locs] = findpeaks(R,'minpeakheight',m/2);
     z((Ws*(i-1))+1:Ws*i) = (Fs / mean(diff(locs))) / 2;
 end
-
-
-wave  = zeros(length(x),1);
-for k = 1:length(x)
-wave(k) = sin(2*pi*(z(k)/Fs)*k);
-end
-
-modulate
-
-out = zeros(length(x),2);
-out(:,1) = sum(x,2);
-out(:,2) = wave;
-soundsc(out,Fs);

@@ -1,7 +1,7 @@
 %% Matlab Audio Effects
 [x,Fs] = audioread('acousticGtr.wav');
 
-%% Downsampler (Takes too long!)
+%% Downsampler 
 % y = (input,division of original sample rate)
 y = MAE_Downsamp(x,20);
 soundsc(y,Fs);
@@ -42,4 +42,5 @@ y = MAE_SampHold(x,Fs,0.2,[2 8],0.2,0);
 soundsc(y,Fs);
 
 %% SNAC Pitch Detection
-y = MAE_SNAC
+% y(vector of pitches)= (input,sampleRate,window size)
+y = MAE_SNAC(x,Fs,2048);
