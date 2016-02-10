@@ -20,7 +20,7 @@ for i = 1:I
         holdLen = round((random(pdLen,1,1) * Fs));
         if (i-holdLen) > 1
             
-            holdLoopDiv = round(holdLen/randi(holdDivs,1,1));
+            holdLoopDiv = round(holdLen/holdDivs(randi(length(holdDivs))));
             holdLoop = readBuff([(i - holdLoopDiv+1):i],:);
             
             for j = 1:holdLen

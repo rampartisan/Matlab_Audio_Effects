@@ -21,7 +21,6 @@ maxf = cFreq+width;
 delta = speed/Fs;
 
 % calculate tri-wave of centre freq vals 
-Fc=minf:delta:maxf;
 while(length(Fc) < length(x) )
     Fc= [ Fc (maxf:-delta:minf) ];
     Fc= [ Fc (minf:delta:maxf) ];

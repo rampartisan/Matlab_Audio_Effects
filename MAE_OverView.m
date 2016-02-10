@@ -1,9 +1,9 @@
 %% Matlab Audio Effects
 [x,Fs] = audioread('acousticGtr.wav');
-
+soundsc(x,Fs);
 %% Downsampler 
 % y = (input,division of original sample rate)
-y = MAE_Downsamp(x,20);
+y = MAE_Downsamp(x,2);
 soundsc(y,Fs);
 
 %% Tremolo
@@ -33,14 +33,16 @@ soundsc(y,Fs);
 
 %% Feedback Delay
 %(input,SampleRate,DelTime,FeedBackAmount)
-y = MAE_FBDel(x,Fs,1,0.4);
+y = MAE_FBDel(x,Fs,0.5,0.4);
 soundsc(y,Fs);
 
 %% Sample and Hold
 % y = (input,sampleRate,meanLen,holdDivs,holdOccur,mode)
-y = MAE_SampHold(x,Fs,0.2,[2 8],0.2,0);
+y = MAE_FBDel(x,Fs,0.5,0.4);
+
+y = MAE_SampHold(y,Fs,0.2,[2 8],0.2,0);
 soundsc(y,Fs);
 
-%% SNAC Pitch Detection
+%% SNAC Pitch Detection - inefficent, do not recomend long sounds!
 % y(vector of pitches)= (input,sampleRate,window size)
 y = MAE_SNAC(x,Fs,2048);
