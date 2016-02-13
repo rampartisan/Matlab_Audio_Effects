@@ -36,13 +36,13 @@ soundsc(y,Fs);
 y = MAE_FBDel(x,Fs,0.5,0.4);
 soundsc(y,Fs);
 
+%% Simple Reverb
+%(input,SampleRate,DelTime,FeedBackAmount)
+y = MAE_SimpleReverb(x,Fs,0.1,10);
+soundsc(y,Fs);
+
 %% Sample and Hold
 % y = (input,sampleRate,meanLen,holdDivs,holdOccur,mode)
-y = MAE_FBDel(x,Fs,0.5,0.4);
-
 y = MAE_SampHold(y,Fs,0.2,[2 8],0.2,0);
 soundsc(y,Fs);
 
-%% SNAC Pitch Detection - inefficent, do not recomend long sounds!
-% y(vector of pitches)= (input,sampleRate,window size)
-y = MAE_SNAC(x,Fs,2048);
