@@ -1,6 +1,7 @@
 %% Matlab Audio Effects
 [x,Fs] = audioread('acousticGtr.wav');
 soundsc(x,Fs);
+
 %% Downsampler 
 % y = (input,division of original sample rate)
 y = MAE_Downsamp(x,2);
@@ -45,4 +46,21 @@ soundsc(y,Fs);
 % y = (input,sampleRate,meanLen,holdDivs,holdOccur,mode)
 y = MAE_SampHold(y,Fs,0.2,[2 8],0.2,0);
 soundsc(y,Fs);
+
+%% Frequency Domain filter 
+%  y = MAE_specFilt(input,windowSize,filter matrix)
+windowSize = 1024;
+
+% draw shape of spectral filter on bar plot using mouse
+MAE_SpecDrawFcn(windowSize);
+
+% Freq Domain Filtering
+y = MAE_SpecFilt(x,windowSize,binValues',1);
+
+soundsc(y,Fs);
+figure;
+subplot(2,1,1)
+spectrogram(x(:,1));
+subplot(2,1,2)
+spectrogram(y(:,1));
 
