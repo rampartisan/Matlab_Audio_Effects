@@ -8,7 +8,7 @@ if nargin < 3
 speed = 2000; 
 % damping for small pass band
 damp = 0.05;
-% centre freqand width for bandpass
+% centre freq and width for bandpass
 cFreq = 1750;
 width = 875;
 end
@@ -21,6 +21,7 @@ maxf = cFreq+width;
 delta = speed/Fs;
 
 % calculate tri-wave of centre freq vals 
+Fc=minf:delta:maxf;
 while(length(Fc) < length(x) )
     Fc= [ Fc (maxf:-delta:minf) ];
     Fc= [ Fc (minf:delta:maxf) ];

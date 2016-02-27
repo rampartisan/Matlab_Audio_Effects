@@ -1,3 +1,5 @@
+% Tremolo (amp modulation) effect
+
 function y = MAE_Tremolo(x,Fs,modFreq,depth)
 
 % you can supply just input + sampleRate arguments and 
