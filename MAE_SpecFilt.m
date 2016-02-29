@@ -18,17 +18,14 @@ for chanIdx = 1:numChan
         % --- STFT --- %
         % segment and window input according to index
         windowedSig = x(idx:idx+(windowSize-1),chanIdx) .* window;
-        windowedSig(1);
         % FFT
         Z = fft(windowedSig,windowSize);
         hZ  = Z(1:nRow);
         % --- Filter -- %
         
         magX = abs(hZ);
-        phaseX = angle(hZ);
-        magY = zeros(size(magX));
-        
-        magY = magY + (magX .* filtMat);
+        phaseX = angle(hZ);        
+        magY = (magX .* filtMat);
         hZF =  magY .* exp(1i*phaseX);
         
         % --- ISTFT --- %
