@@ -4,7 +4,7 @@ function y = MAE_SpecFilt(x,windowSize,filtMat,mix)
 yf = zeros(inLen,numChan);
 nRow = ceil((1+windowSize)/2);
 window = MAA_HammWindows(windowSize,'p');
-hopSize = floor(windowSize * 0.5);
+hopSize = floor(windowSize * 0.25);
 
 
 

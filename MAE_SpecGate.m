@@ -4,7 +4,7 @@ function y = MAE_SpecGate(x,windowSize,thresh,mix)
 yf = zeros(inLen,numChan);
 nRow = ceil((1+windowSize)/2);
 window = MAA_HammWindows(windowSize,'p');
-hopSize = floor(windowSize * 0.5);
+hopSize = floor(windowSize * 0.25);
 
 % STFT on one channel at a time
 for chanIdx = 1:numChan

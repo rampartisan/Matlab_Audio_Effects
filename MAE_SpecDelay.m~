@@ -15,6 +15,7 @@ extraCols = max(delMat) * 10;
 extraSamps = extraCols * windowSize;
 % Set output as input, with the extra zeroed samples
 y = [x;zeros(extraSamps,size(x,2))];
+delOut = zeros(size(y));
 % STFT on one channel at a time
 for chanIdx = 1:numChan
     % Create empty out STFT matrix, with the extra columns
@@ -31,11 +32,13 @@ for chanIdx = 1:numChan
         windowedSig = y(idx:idx+(windowSize-1),chanIdx) .* window;
         % DFT
         Z = fft(windowedSig);
-        % store DFT vector in STFT Matrix
+        % store DFT vector in STFT Matrix (only positives needed, 
+        % we recreate the negatives at resynthesis)
         STFT(:,colIdx) = Z; 
 
         % --- Delays --- %      
-        % empty DFT vector for the delayed spectral components
+        % empty DFT vector for the delayed spectral components, again only
+        % need half
         
         ZDel = zeros(windowSize,1,'like',Z);
         % iterate over each bin value, if the delay time is valid 
@@ -45,18 +48,20 @@ for chanIdx = 1:numChan
                 
         for delIdx = 1:length(ZDel)              
         if colIdx - delMat(delIdx) > 0 && delMat(delIdx) ~= 0;  
-            ZDel(delIdx) = STFT(delIdx,colIdx - delMat(delIdx));  
+            ZD(delIdx) = STFT(delIdx,colIdx - delMat(delIdx));  
         end       
         end
         
         % --- ISTFT --- %        
+        % positive a negative freq values
+%         ZDel = [HZDel;flipud(HZDel)];
         % inverse FFT
         delayedSig = real(ifft(ZDel));
                 
         % combine delayed signal and original/overlap add, amp
         % set by user specified mix
-        y(idx:idx+(windowSize-1),chanIdx) = ...
-            (y(idx:idx+(windowSize-1),chanIdx)*(1-mix)) + delayedSig*mix;
+        delOut(idx:idx+(windowSize-1),chanIdx) = ...
+            delOut(idx:idx+(windowSize-1),chanIdx) + delayedSig;
         
         % --- Pointer Updates --- %
         idx = idx + hopSize;
@@ -66,5 +71,5 @@ for chanIdx = 1:numChan
 
     
 end
-% y = y*(1-mix) + delOut*mix;
+y = y*(1-mix) + delOut*mix;
 end

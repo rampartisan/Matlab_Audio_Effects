@@ -84,9 +84,9 @@ soundsc(y,Fs)
 % Use MAE_SpecDrawFcn to easily create delay vector.
 % Other wise the vector should be round(windowSize/2)+1
 % y = MAE_SpecDelay(input,windowsize,Delay Vector,Mix)
-windowSize = 4096;
-MAE_SpecDrawFcn(windowSize,[0 40],1);
-y = MAE_SpecDelay(x,windowSize,binValues',0.5);
+windowSize = 2048;
+MAE_SpecDrawFcn(windowSize*2,[0 40],1);
+y = MAE_SpecDelay(x,windowSize,binValues',0.8);
 soundsc(y,Fs);
 
 %% Spectral Draw Function
@@ -94,7 +94,5 @@ soundsc(y,Fs);
 % Returns a variable called binValues when apply is clicked. The script it
 % is called from is paused until value is returned.
 % MAE_SpecDrawFcn(windowSize,[minYValue maxYValue],roundYValues(0 or 1)
-MAE_SpecDrawFcn(1024,[0 100],1);
+MAE_SpecDrawFcn(64,[0 100],1);
 plot(binValues);
-
-

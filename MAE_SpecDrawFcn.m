@@ -6,7 +6,7 @@ set(f1,'WindowButtonDownFcn',@BDF);
 % axes as a proxy)
 ah = axes('SortMethod','childorder');
 % Create bar graph, number of bars is half windowsize +1
-binGraph = bar(zeros(floor(windowSize/2)+1,1),'PickableParts', 'none');
+binGraph = bar(zeros(floor(windowSize/2),1),'PickableParts', 'none');
 % Set limits of bar graph, y specified by user input
 xlim([1 floor(windowSize/2)+1]);
 ylim([binLims(1) binLims(2)+(binLims(2)/10)]);

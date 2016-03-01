@@ -1,10 +1,10 @@
-function y = MAE_SpecFreeze(x,windowSize,chance)
+function y = MAE_SpecFreeze(x,windowSize,chance,width)
 
 [inLen,numChan] = size(x);
 yf = zeros(inLen,numChan);
 nRow = ceil((1+windowSize)/2);
 window = MAA_HammWindows(windowSize,'p');
-hopSize = floor(windowSize * 0.5);
+hopSize = floor(windowSize * 0.1);
 
 holding = 0;
 
@@ -23,8 +23,8 @@ for chanIdx = 1:numChan
         
         if holding == 0;
             if randi([0 chance],1,1) == 0
-                threshEnd = randi([100 (windowSize/2)-1],1,1);
-                threshStart = randi([1 99],1,1);
+                threshEnd = randi([1000 (windowSize/2)-1],1,1);
+                threshStart = randi([1 999],1,1);
                 holdFrame = hZ(threshStart:threshEnd);
                 holding = 1;
             end
