@@ -2,9 +2,9 @@ function y = MAE_SpecFilt(x,windowSize,filtMat,mix)
 
 [inLen,numChan] = size(x);
 yf = zeros(inLen,numChan);
-nRow = ceil((1+windowSize)/2);
+nRow = ceil(windowSize/2);
 window = MAA_HammWindows(windowSize,'p');
-hopSize = floor(windowSize * 0.25);
+hopSize = floor(windowSize * 0.5);
 
 
 
@@ -14,22 +14,22 @@ for chanIdx = 1:numChan
     filtIdx = 1;
 
     % Compute STFT
-    while (idx+(windowSize-1) <= length(x))                                
+    while (idx+windowSize) <= length(x)                                
         % --- STFT --- %
         % segment and window input according to index
         windowedSig = x(idx:idx+(windowSize-1),chanIdx) .* window;
         % FFT
-        Z = fft(windowedSig,windowSize);
+        Z = fft(windowedSig);
         hZ  = Z(1:nRow);
         % --- Filter -- %
         
         magX = abs(hZ);
         phaseX = angle(hZ);        
-        magY = (magX .* filtMat);
+        magY = (magX .* filtMat(1:nRow));
         hZF =  magY .* exp(1i*phaseX);
         
         % --- ISTFT --- %
-        X = [hZF; conj(hZF(end-1:-1:2))];
+        X = [hZF;hZF];
         xprim = real(ifft(X));
                 
         yf(idx:idx+(windowSize-1),chanIdx) = yf(idx:idx+(windowSize-1),chanIdx) + xprim;              

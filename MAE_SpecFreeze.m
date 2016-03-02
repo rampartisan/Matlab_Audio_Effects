@@ -1,10 +1,10 @@
-function y = MAE_SpecFreeze(x,windowSize,chance,width)
+function y = MAE_SpecFreeze(x,windowSize,chance)
 
 [inLen,numChan] = size(x);
 yf = zeros(inLen,numChan);
-nRow = ceil((1+windowSize)/2);
+nRow = ceil(windowSize/2);
 window = MAA_HammWindows(windowSize,'p');
-hopSize = floor(windowSize * 0.1);
+hopSize = floor(windowSize * 0.5);
 
 holding = 0;
 
@@ -19,12 +19,12 @@ for chanIdx = 1:numChan
         windowedSig = x(idx:idx+(windowSize-1),chanIdx) .* window;
         Z = fft(windowedSig,windowSize);
         hZ  = Z(1:nRow);
-        hZf = zeros(size(hZ));
+        hZF = zeros(size(hZ));
         
         if holding == 0;
             if randi([0 chance],1,1) == 0
-                threshEnd = randi([1000 (windowSize/2)-1],1,1);
-                threshStart = randi([1 999],1,1);
+                threshEnd = randi([501 1000],1,1);
+                threshStart = randi([1 500],1,1);
                 holdFrame = hZ(threshStart:threshEnd);
                 holding = 1;
             end
@@ -36,16 +36,16 @@ for chanIdx = 1:numChan
                 
         
         if holding == 1;            
-            hZf(threshStart:threshEnd) = holdFrame;         
-            hZf(threshEnd+1:end) = hZ(threshEnd+1:end);
-            hZf(1:threshStart) = hZf(1:threshStart);
+            hZF(threshStart:threshEnd) = holdFrame;         
+            hZF(threshEnd+1:end) = hZ(threshEnd+1:end);
+            hZF(1:threshStart) = hZF(1:threshStart);
         else
             hZF = hZ;
         end
         
         
         % --- ISTFT --- %
-        X = [hZF; conj(hZF(end-1:-1:2))];
+        X = [hZF; hZF];
         xprim = real(ifft(X));
         
         yf(idx:idx+(windowSize-1),chanIdx) = yf(idx:idx+(windowSize-1),chanIdx) + xprim;

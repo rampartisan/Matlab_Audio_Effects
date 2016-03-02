@@ -2,9 +2,9 @@ function y = MAE_SpecGate(x,windowSize,thresh,mix)
 
 [inLen,numChan] = size(x);
 yf = zeros(inLen,numChan);
-nRow = ceil((1+windowSize)/2);
+nRow = ceil(windowSize/2);
 window = MAA_HammWindows(windowSize,'p');
-hopSize = floor(windowSize * 0.25);
+hopSize = floor(windowSize * 0.5);
 
 % STFT on one channel at a time
 for chanIdx = 1:numChan
@@ -26,7 +26,7 @@ for chanIdx = 1:numChan
         magY(grtThanThresh) = magX(grtThanThresh);
         hZF =  magY .* exp(1i*phaseX);
         % --- ISTFT --- %
-        X = [hZF; conj(hZF(end-1:-1:2))];
+        X = [hZF;hZF];
         xprim = real(ifft(X));
         yf(idx:idx+(windowSize-1),chanIdx) = yf(idx:idx+(windowSize-1),chanIdx) + xprim;                      
         % index updates

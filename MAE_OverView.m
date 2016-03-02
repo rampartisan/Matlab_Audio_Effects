@@ -85,8 +85,8 @@ soundsc(y,Fs)
 % Other wise the vector should be round(windowSize/2)+1
 % y = MAE_SpecDelay(input,windowsize,Delay Vector,Mix)
 windowSize = 2048;
-MAE_SpecDrawFcn(windowSize*2,[0 40],1);
-y = MAE_SpecDelay(x,windowSize,binValues',0.8);
+MAE_SpecDrawFcn(windowSize,[0 40],1);
+y = MAE_SpecDelay(x,windowSize,binValues',0.5);
 soundsc(y,Fs);
 
 %% Spectral Draw Function

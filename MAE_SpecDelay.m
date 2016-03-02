@@ -15,10 +15,11 @@ extraCols = max(delMat) * 10;
 extraSamps = extraCols * windowSize;
 % Set output as input, with the extra zeroed samples
 y = [x;zeros(extraSamps,size(x,2))];
+delOut = zeros(size(y));
 % STFT on one channel at a time
 for chanIdx = 1:numChan
     % Create empty out STFT matrix, with the extra columns
-    STFT = zeros(windowSize,nCol+extraCols);
+    STFT = zeros(nRow,nCol+extraCols);
     % Init Pointers
     idx = 1;
     colIdx = 1;
@@ -32,22 +33,24 @@ for chanIdx = 1:numChan
         % DFT
         Z = fft(windowedSig);
         % store DFT vector in STFT Matrix
-        STFT(:,colIdx) = Z; 
+        STFT(:,colIdx) = Z(1:nRow); 
 
         % --- Delays --- %      
         % empty DFT vector for the delayed spectral components
         
-        ZDel = zeros(windowSize,1,'like',Z);
+        HZDel = zeros(nRow,1,'like',Z);
         % iterate over each bin value, if the delay time is valid 
         % (not referencing negative frames) and is not 0 then set the
         % output FFT Component to a previous component determined by delay
         % time in delMat
                 
-        for delIdx = 1:length(ZDel)              
+        for delIdx = 1:length(HZDel)              
         if colIdx - delMat(delIdx) > 0 && delMat(delIdx) ~= 0;  
-            ZDel(delIdx) = STFT(delIdx,colIdx - delMat(delIdx));  
+            HZDel(delIdx) = STFT(delIdx,colIdx - delMat(delIdx));  
         end       
         end
+        
+        ZDel = [HZDel;HZDel];
         
         % --- ISTFT --- %        
         % inverse FFT
@@ -55,9 +58,10 @@ for chanIdx = 1:numChan
                 
         % combine delayed signal and original/overlap add, amp
         % set by user specified mix
-        y(idx:idx+(windowSize-1),chanIdx) = ...
-            (y(idx:idx+(windowSize-1),chanIdx)*(1-mix)) + delayedSig*mix;
+        delOut(idx:idx+(windowSize-1),chanIdx) = ...
+            delOut(idx:idx+(windowSize-1),chanIdx) + delayedSig;
         
+
         % --- Pointer Updates --- %
         idx = idx + hopSize;
         colIdx = colIdx+1;
@@ -66,5 +70,5 @@ for chanIdx = 1:numChan
 
     
 end
-% y = y*(1-mix) + delOut*mix;
+y = y*(1-mix) + delOut*mix;
 end
